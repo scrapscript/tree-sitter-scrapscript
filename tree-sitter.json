@@ -1,0 +1,42 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "scrapscript",
+      "camelcase": "Scrapscript",
+      "title": "Scrapscript",
+      "scope": "source.scrapscript",
+      "file-types": [
+        "ss",
+        "scrap"
+      ],
+      "injection-regex": "^scrapscript$",
+      "class-name": "TreeSitterScrapscript"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "a sharable programming language",
+    "authors": [
+      {
+        "name": "Taylor Troesh",
+        "email": "taylor@troe.sh",
+        "url": "https://taylor.town/"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/scrapscript/scrapscript",
+      "funding": "https://scrapscript.org/"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}

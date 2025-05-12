@@ -1,0 +1,768 @@
+===========================
+BYTES TEST 1
+===========================
+
+~~aGVsbG8gd29ybGQ=
+
+---
+
+(program
+  (bytes))
+
+===========================
+BYTES TEST 2
+===========================
+
+~~QUZG
+
+---
+
+(program
+  (bytes))
+
+===========================
+NUMBERS TEST 1
+===========================
+
+123
+
+---
+
+(program
+  (number))
+
+===========================
+NUMBERS TEST 2
+===========================
+
+1.23
+
+---
+
+(program
+  (number))
+
+===========================
+TEXT TEST 1
+===========================
+
+"hello world"
+
+---
+
+(program
+  (text))
+
+===========================
+TEXT TEST 2
+===========================
+
+"🐸"
+
+---
+
+(program
+  (text))
+
+===========================
+TEXT TEST 3
+===========================
+
+"hello" ++ "world"
+
+---
+
+(program
+  (infix
+    (text)
+    (op)
+    (text)))
+
+===========================
+LIST TEST 1
+===========================
+
+[1, 2, 3]
+
+---
+
+(program
+  (list
+    (number)
+    (number)
+    (number)))
+
+===========================
+LIST TEST 2
+===========================
+
+[]
+
+---
+
+(program
+  (list))
+
+===========================
+LIST TEST 3
+===========================
+
+[1, 2, 3] +< 4
+
+---
+
+(program
+  (infix
+    (list
+      (number)
+      (number)
+      (number))
+    (op)
+    (number)))
+
+===========================
+RECORD TEST 1
+===========================
+
+{ a = 1, b = "x" }
+
+---
+
+(program
+  (record
+    (field
+      (name)
+      (number))
+    (field
+      (name)
+      (text))))
+
+===========================
+RECORD TEST 2
+===========================
+
+{ ..g }
+
+---
+
+(program
+  (record
+    (field
+      (value)
+      (id))))
+
+===========================
+RECORD TEST 3
+===========================
+
+rec.a
+
+---
+
+(program
+  (infix
+    (id)
+    (op)
+    (id)))
+
+===========================
+fun TEST 1
+===========================
+
+| "a" -> 1 | "b" -> 2 |
+
+---
+
+(program
+  (fun
+    (_arm
+      (pattern
+        (text))
+      (number))
+    (_arm
+      (pattern
+        (text))
+      (number))))
+
+===========================
+fun TEST 2
+===========================
+
+f "b" ; f = | "a" -> 1 | "b" -> 2 | "c" -> 3 | x -> 0
+
+---
+
+(program
+  (apply
+    (id)
+    (text))
+  (apply
+    (id)
+    (op)
+    (fun
+      (_arm
+        (pattern
+          (text))
+        (number))
+      (_arm
+        (pattern
+          (text))
+        (number))
+      (_arm
+        (pattern
+          (text))
+        (number))
+      (_arm
+        (pattern
+          (id))
+        (number)))))
+
+===========================
+op TEST 1
+===========================
+
+1 + 2
+
+---
+
+(program
+  (infix
+    (number)
+    (op)
+    (number)))
+
+===========================
+id TEST 1
+===========================
+
+x
+
+---
+
+(program
+  (id))
+
+===========================
+HOLE TEST 1
+===========================
+
+()
+
+---
+
+(program
+  (hole))
+
+===========================
+fun TEST 3
+===========================
+
+(x -> x ' x) 123
+
+---
+
+(program
+  (apply
+    (parens
+      (fun
+        (_arm
+          (pattern
+            (id))
+          (infix
+            (id)
+            (op)
+            (id)))))
+    (number)))
+
+===========================
+RECORD TEST 4
+===========================
+
+{ init = #a 123 }
+
+---
+
+(program
+  (record
+    (field
+      (name)
+      (tag
+        (id)
+        (number)))))
+
+===========================
+op TEST 2
+===========================
+
+1.0 / 2.0
+
+---
+
+(program
+  (infix
+    (number)
+    (op)
+    (number)))
+
+===========================
+op TEST 3
+===========================
+
+3 >= 4
+
+---
+
+(program
+  (infix
+    (number)
+    (op)
+    (number)))
+
+===========================
+RECORD TEST 5
+===========================
+
+{a = 4}@a
+
+---
+
+(program
+  (infix
+    (record
+      (field
+        (name)
+        (number)))
+    (op)
+    (id)))
+
+===========================
+LIST TEST 4
+===========================
+
+[1 + 2, 3 + 4]
+
+---
+
+(program
+  (list
+    (infix
+      (number)
+      (op)
+      (number))
+    (infix
+      (number)
+      (op)
+      (number))))
+
+===========================
+fun TEST 4
+===========================
+
+| #x _ -> 234 | #a 123 -> 456 | _ -> 789
+
+---
+
+(program
+  (fun
+    (_arm
+      (pattern
+        (tag
+          (id)
+          (hole)))
+      (number))
+    (_arm
+      (pattern
+        (tag
+          (id)
+          (number)))
+      (number))
+    (_arm
+      (pattern
+        (hole))
+      (number))))
+
+===========================
+op TEST 4
+===========================
+
+1.0 / 2.0 + 3.0
+
+---
+
+(program
+  (infix
+    (infix
+      (number)
+      (op)
+      (number))
+    (op)
+    (number)))
+
+===========================
+fun TEST 5
+===========================
+
+f (#add {x = 3, y = 4}) ; f = | #b () -> "foo" | #add {x = x, y = y} -> x + y
+
+---
+
+(program
+  (apply
+    (id)
+    (tag
+      (id)
+      (record
+        (field
+          (name)
+          (number))
+        (field
+          (name)
+          (number)))))
+  (apply
+    (id)
+    (op)
+    (fun
+      (_arm
+        (pattern
+          (tag
+            (id)
+            (hole)))
+        (text))
+      (_arm
+        (pattern
+          (tag
+            (id)
+            (record
+              (field
+                (name)
+                (id))
+              (field
+                (name)
+                (id)))))
+        (infix
+          (id)
+          (op)
+          (id))))))
+
+===========================
+fun TEST 6
+===========================
+
+say (1 < 2) ; say = | #false () -> "oh no" | #true () -> "omg"
+
+---
+
+(program
+  (apply
+    (id)
+    (parens
+      (infix
+        (number)
+        (op)
+        (number))))
+  (apply
+    (id)
+    (op)
+    (fun
+      (_arm
+        (pattern
+          (tag
+            (id)
+            (hole)))
+        (text))
+      (_arm
+        (pattern
+          (tag
+            (id)
+            (hole)))
+        (text)))))
+
+===========================
+fun TEST 7
+===========================
+
+f {x = 4, y = 5} ; f = | {} -> 0 | {x = a, ...} -> a | c -> 1
+
+---
+
+(program
+  (apply
+    (id)
+    (record
+      (field
+        (name)
+        (number))
+      (field
+        (name)
+        (number))))
+  (apply
+    (id)
+    (op)
+    (fun
+      (_arm
+        (pattern
+          (record))
+        (number))
+      (_arm
+        (pattern
+          (record
+            (field
+              (name)
+              (id))
+            (field
+              (value)
+              (hole))))
+        (id))
+      (_arm
+        (pattern
+          (id))
+        (number)))))
+
+===========================
+LIST TEST 5
+===========================
+
+tail [1,2,3] ; tail = | first >+ rest -> rest
+
+---
+
+(program
+  (apply
+    (id)
+    (list
+      (number)
+      (number)
+      (number)))
+  (apply
+    (id)
+    (op)
+    (fun
+      (_arm
+        (pattern
+          (infix
+            (id)
+            (op)
+            (id)))
+        (id)))))
+
+===========================
+op TEST 5
+===========================
+
+false || false && true
+
+---
+
+(program
+  (infix
+    (infix
+      (id)
+      (op)
+      (id))
+    (op)
+    (id)))
+
+===========================
+TAG TEST 1
+===========================
+
+#false () || #false () && #true ()
+
+---
+
+(program
+  (infix
+    (infix
+      (tag
+        (id)
+        (hole))
+      (op)
+      (tag
+        (id)
+        (hole)))
+    (op)
+    (tag
+      (id)
+      (hole))))
+
+===========================
+fun TEST 8
+===========================
+
+1 |> (a -> a + 2) |> (b -> b * 2)
+
+---
+
+(program
+  (infix
+    (infix
+      (number)
+      (op)
+      (parens
+        (fun
+          (_arm
+            (pattern
+              (id))
+            (infix
+              (id)
+              (op)
+              (number))))))
+    (op)
+    (parens
+      (fun
+        (_arm
+          (pattern
+            (id))
+          (infix
+            (id)
+            (op)
+            (number)))))))
+
+===========================
+RECORD TEST 6
+===========================
+
+{x=[1,{y=2}]}
+
+---
+
+(program
+  (record
+    (field
+      (name)
+      (list
+        (number)
+        (record
+          (field
+            (name)
+            (number)))))))
+
+===========================
+LIST TEST 6
+===========================
+
+[[1,[2,3]],4]
+
+---
+
+(program
+  (list
+    (list
+      (number)
+      (list
+        (number)
+        (number)))
+    (number)))
+
+===========================
+RECORD TEST 7
+===========================
+
+{x={y=1}}
+
+---
+
+(program
+  (record
+    (field
+      (name)
+      (record
+        (field
+          (name)
+          (number))))))
+
+===========================
+NUMBER TEST 3
+===========================
+
+[ 1 , -1 , 1.0, -1.0 ]
+
+---
+
+(program
+  (list
+    (number)
+    (number)
+    (number)
+    (number)))
+
+===========================
+fun TEST 9
+===========================
+
+x -> rest -> { x, ..rest }
+
+---
+
+(program
+  (fun
+    (_arm
+      (pattern
+        (id))
+      (fun
+        (_arm
+          (pattern
+            (id))
+          (record
+            (field
+              (name)
+              (id))
+            (field
+              (value)
+              (id))))))))
+
+===========================
+COMMENT TEST 1
+===========================
+
+-- comment1
+2
+-- comment3
+
+---
+
+(program
+  (number))
+
+===========================
+fun TEST 10
+===========================
+
+f -> g -> f >> g
+
+---
+
+(program
+  (fun
+    (_arm
+      (pattern
+        (id))
+      (fun
+        (_arm
+          (pattern
+            (id))
+          (infix
+            (id)
+            (op)
+            (id)))))))
+
+===========================
+RECORD TEST 8
+===========================
+
+r.a ; r = { a = 1 }
+
+---
+
+(program
+  (infix
+    (id)
+    (op)
+    (id))
+  (apply
+    (id)
+    (op)
+    (record
+      (field
+        (name)
+        (number)))))
