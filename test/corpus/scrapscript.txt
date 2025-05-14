@@ -74,9 +74,9 @@ TEXT TEST 3
 
 (program
   (infix
-    (text)
-    (op)
-    (text)))
+    left: (text)
+    op: (op)
+    right: (text)))
 
 ===========================
 LIST TEST 1
@@ -131,11 +131,11 @@ RECORD TEST 1
 (program
   (record
     (field
-      (name)
-      (number))
+      name: (id)
+      value: (number))
     (field
-      (name)
-      (text))))
+      name: (id)
+      value: (text))))
 
 ===========================
 RECORD TEST 2
@@ -148,8 +148,7 @@ RECORD TEST 2
 (program
   (record
     (field
-      (value)
-      (id))))
+      value: (id))))
 
 ===========================
 RECORD TEST 3
@@ -285,10 +284,10 @@ RECORD TEST 4
 (program
   (record
     (field
-      (name)
-      (tag
-        (id)
-        (number)))))
+      name: (id)
+      value: (tag
+               (id)
+               (number)))))
 
 ===========================
 op TEST 2
@@ -328,12 +327,12 @@ RECORD TEST 5
 
 (program
   (infix
-    (record
-      (field
-        (name)
-        (number)))
-    (op)
-    (id)))
+    left: (record
+            (field
+              name: (id)
+              value: (number)))
+    op: (op)
+    right: (id)))
 
 ===========================
 LIST TEST 4
@@ -629,13 +628,13 @@ RECORD TEST 6
 (program
   (record
     (field
-      (name)
-      (list
-        (number)
-        (record
-          (field
-            (name)
-            (number)))))))
+      name: (id)
+      value: (list
+               (number)
+               (record
+                 (field
+                   name: (id)
+                   value: (number)))))))
 
 ===========================
 LIST TEST 6
@@ -665,11 +664,11 @@ RECORD TEST 7
 (program
   (record
     (field
-      (name)
-      (record
-        (field
-          (name)
-          (number))))))
+      name: (id)
+      value: (record
+               (field
+                 name: (id)
+                 value: (number))))))
 
 ===========================
 NUMBER TEST 3
