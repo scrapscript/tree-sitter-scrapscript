@@ -27,6 +27,11 @@ module.exports = grammar({
     [$._expr, $._callable],
   ],
 
+   extras: $ => [
+     $._whitespace,
+     $._line_comment,
+   ],
+ 
   rules: {
     program: ($) => $._subprogram,
 
@@ -41,6 +46,10 @@ module.exports = grammar({
     _annotation: $ => seq($.pattern, ":", $.id),
 
     _binding: $ => choice(seq($.pattern, "=", $._expr), seq($._annotation, "=", $._expr)),
+
+    _whitespace: _ => /\s+/,
+
+    _line_comment: _ => /--.*/,
 
     _expr: ($) =>
       choice(
