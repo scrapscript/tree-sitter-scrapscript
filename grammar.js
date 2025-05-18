@@ -59,7 +59,7 @@ module.exports = grammar({
         seq(field("left", $._expr), field("op", $.op), field("right", $._expr))
       ),
 
-    number: ($) => choice(/[0-9]+/, /[0-9]+\.[0-9]+/),
+    number: ($) => seq(optional("-"), choice(/[0-9]+/, /[0-9]+\.[0-9]+/)),
 
     text: ($) => /"[^"]*"/,
 
