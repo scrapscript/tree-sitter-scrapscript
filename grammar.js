@@ -121,6 +121,10 @@ module.exports = grammar({
         seq("...", field("value", $._expr))
       ),
 
+    // [TODO]: Do we want nested where clauses within regular
+    // functions and match functions?
+    // If so, we can use $._subprogram instead of $._expr in the
+    // two productions below
     fun: ($) =>
       prec.right(PREC.FUNCTION, seq($.pattern, "->", $._expr)),
 
