@@ -374,22 +374,22 @@ fun TEST 4
 ---
 
 (program
-  (fun
-    (_arm
+  (match_fun
+    (match_arm
       (pattern
         (tag
           (id)
-          (hole)))
+          (wildcard)))
       (number))
-    (_arm
+    (match_arm
       (pattern
         (tag
           (id)
           (number)))
       (number))
-    (_arm
+    (match_arm
       (pattern
-        (hole))
+        (wildcard))
       (number))))
 
 ===========================
