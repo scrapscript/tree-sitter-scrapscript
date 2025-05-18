@@ -54,6 +54,7 @@ module.exports = grammar({
         $.list,
         $.record,
         $.fun,
+        $.match_fun,
         $.id,
         $.hole,
         $.tag,
@@ -121,9 +122,12 @@ module.exports = grammar({
       ),
 
     fun: ($) =>
-      prec.right(PREC.FUNCTION, seq("|", $._arm, repeat(seq("|", $._arm)))),
+      prec.right(PREC.FUNCTION, seq($.pattern, "->", $._expr)),
 
-    _arm: ($) => prec.right(PREC.FUNCTION + 1, seq($.pattern, "->", $._expr)),
+    match_fun: ($) =>
+      prec.right(PREC.FUNCTION, seq("|", $.match_arm, repeat(seq("|", $.match_arm)))),
+
+    match_arm: ($) => prec.right(PREC.FUNCTION + 1, seq($.pattern, "->", $._expr)),
 
     pattern: ($) =>
       choice(
