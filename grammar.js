@@ -30,7 +30,19 @@ module.exports = grammar({
   ],
 
   rules: {
-    program: ($) => $._expr,
+    program: ($) => $._subprogram,
+
+    // The following two rules ensure the left-associativity of the
+    // "where" declaration syntax production
+    _subprogram: $ => choice($._expr, $.where),
+
+    where: $ => seq($._subprogram, ";", $.declaration),
+
+    declaration: $ => choice($._annotation, $._binding),
+
+    _annotation: $ => seq($.pattern, ":", $.id),
+
+    _binding: $ => choice(seq($.pattern, "=", $._expr), seq($._annotation, "=", $._expr)),
 
     _expr: ($) =>
       choice(
@@ -48,7 +60,7 @@ module.exports = grammar({
         $.parens
       ),
 
-    parens: ($) => seq("(", field("expr", $._expr), ")"),
+    parens: ($) => seq("(", field("expr", $._subprogram), ")"),
 
     apply: ($) =>
       prec.left(PREC.APPLY, field("apply", seq($._expr, repeat1($._expr)))),
