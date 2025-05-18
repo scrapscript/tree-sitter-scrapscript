@@ -765,14 +765,15 @@ r.a ; r = { a = 1 }
 ---
 
 (program
-  (infix
-    (id)
-    (op)
-    (id))
-  (apply
-    (id)
-    (op)
-    (record
-      (field
-        (name)
-        (number)))))
+  (where
+    (infix
+      (id)
+      (op)
+      (id))
+    (declaration
+      (pattern
+        (id))
+      (record
+        (field
+          (id)
+          (number))))))
