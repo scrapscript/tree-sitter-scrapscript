@@ -76,8 +76,20 @@ module.exports = grammar({
         $.wildcard
       ),
 
+    // The following two rules ensures the left-associativity of the
+    // partial function application syntax production
+    _callable: $ =>
+      choice(
+        // $._callable doesn't include the following syntactically ambiguous
+        // constructs like $.fun and $.match_fun.
+        // [TODO]: Support record access
+        $.apply,
+        $.id,
+        $.parens
+      ),
+
     apply: ($) =>
-      prec.left(PREC.APPLY, field("apply", seq($._expr, repeat1($._expr)))),
+      seq(field("caller", $._callable), field("callee", $._expr)),
 
     infix: ($) =>
       prec.left(
