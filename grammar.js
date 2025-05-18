@@ -97,8 +97,11 @@ module.exports = grammar({
         $.record,
         $.hole,
         $.tag,
+        $.wildcard,
         $.parens
       ),
+
+    wildcard: _ => "_",
 
     op: ($) =>
       choice(
