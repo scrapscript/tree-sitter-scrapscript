@@ -276,13 +276,12 @@ fun TEST 3
   (apply
     (parens
       (fun
-        (_arm
-          (pattern
-            (id))
-          (infix
-            (id)
-            (op)
-            (id)))))
+        (pattern
+          (id))
+        (infix
+          (id)
+          (op)
+          (id))))
     (number)))
 
 ===========================
