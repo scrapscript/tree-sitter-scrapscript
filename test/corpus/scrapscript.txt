@@ -744,17 +744,15 @@ f -> g -> f >> g
 
 (program
   (fun
-    (_arm
+    (pattern
+      (id))
+    (fun
       (pattern
         (id))
-      (fun
-        (_arm
-          (pattern
-            (id))
-          (infix
-            (id)
-            (op)
-            (id)))))))
+      (infix
+        (id)
+        (op)
+        (id)))))
 
 ===========================
 RECORD TEST 8
