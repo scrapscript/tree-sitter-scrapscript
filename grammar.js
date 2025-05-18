@@ -62,6 +62,20 @@ module.exports = grammar({
 
     parens: ($) => seq("(", field("expr", $._subprogram), ")"),
 
+    _unary: $ =>
+      choice(
+        $.bytes,
+        $.hole,
+        $.id,
+        $.list,
+        $.number,
+        $.parens,
+        $.record,
+        $.tag,
+        $.text,
+        $.wildcard
+      ),
+
     apply: ($) =>
       prec.left(PREC.APPLY, field("apply", seq($._expr, repeat1($._expr)))),
 
@@ -83,7 +97,7 @@ module.exports = grammar({
 
     hole: ($) => "()",
 
-    tag: ($) => prec.right(5, seq("#", $.id, optional($._expr))),
+    tag: ($) => prec.right(5, seq("#", $.id, optional($._unary))),
 
     record: ($) => seq("{", optional(sepBy($.field, ",")), "}"),
 
