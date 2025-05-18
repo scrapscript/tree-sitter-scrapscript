@@ -285,6 +285,66 @@ fun TEST 3
     (number)))
 
 ===========================
+WHERE TEST 1
+===========================
+
+a + b + c ; a = 1 ; b = 2 ; c = 3
+
+---
+
+(program
+  (where
+    (where
+      (where
+        (infix
+          (infix
+            (id)
+            (op)
+            (id))
+          (op)
+          (id))
+        (declaration
+          (pattern
+            (id))
+          (number)))
+      (declaration
+        (pattern
+          (id))
+        (number)))
+    (declaration
+      (pattern
+        (id))
+      (number))))
+
+===========================
+WHERE TEST 2
+===========================
+
+x; x : t = 1 ; y : t = 2 ; t : int
+
+---
+
+(program
+  (where
+    (where
+      (where
+        (id)
+        (declaration
+          (pattern
+            (id))
+          (id)
+          (number)))
+      (declaration
+        (pattern
+          (id))
+        (id)
+        (number)))
+    (declaration
+      (pattern
+        (id))
+      (id))))
+
+===========================
 RECORD TEST 4
 ===========================
 
