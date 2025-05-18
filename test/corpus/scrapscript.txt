@@ -463,29 +463,30 @@ say (1 < 2) ; say = | #false () -> "oh no" | #true () -> "omg"
 ---
 
 (program
-  (apply
-    (id)
-    (parens
-      (infix
-        (number)
-        (op)
-        (number))))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (tag
-            (id)
-            (hole)))
-        (text))
-      (_arm
-        (pattern
-          (tag
-            (id)
-            (hole)))
-        (text)))))
+  (where
+    (apply
+      (id)
+      (parens
+        (infix
+          (number)
+          (op)
+          (number))))
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (tag
+              (id)
+              (hole)))
+          (text))
+        (match_arm
+          (pattern
+            (tag
+              (id)
+              (hole)))
+          (text))))))
 
 ===========================
 fun TEST 7
