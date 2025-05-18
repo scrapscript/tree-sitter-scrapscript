@@ -24,9 +24,6 @@ function sepBy(rule, sep) {
 module.exports = grammar({
   name: "scrapscript",
   conflicts: ($) => [
-    [$.apply, $.infix, $._arm],
-    [$.tag, $.parens],
-    [$.apply, $.infix, $.tag],
   ],
 
   rules: {
