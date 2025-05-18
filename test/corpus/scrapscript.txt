@@ -184,12 +184,12 @@ fun TEST 1
 ---
 
 (program
-  (fun
-    (_arm
+  (match_fun
+    (match_arm
       (pattern
         (text))
       (number))
-    (_arm
+    (match_arm
       (pattern
         (text))
       (number))))
