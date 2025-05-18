@@ -203,29 +203,30 @@ f "b" ; f = | "a" -> 1 | "b" -> 2 | "c" -> 3 | x -> 0
 ---
 
 (program
-  (apply
-    (id)
-    (text))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (text))
-        (number))
-      (_arm
-        (pattern
-          (text))
-        (number))
-      (_arm
-        (pattern
-          (text))
-        (number))
-      (_arm
-        (pattern
-          (id))
-        (number)))))
+  (where
+    (apply
+      (id)
+      (text))
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (text))
+          (number))
+        (match_arm
+          (pattern
+            (text))
+          (number))
+        (match_arm
+          (pattern
+            (text))
+          (number))
+        (match_arm
+          (pattern
+            (id))
+          (number))))))
 
 ===========================
 op TEST 1
