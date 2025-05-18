@@ -12,8 +12,8 @@ const PREC = {
   STRING: 2,
   FIELD_ACCESS: 1,
   PART: 1,
-  FUNCTION: 10,
-  INFIX: 2,
+  FUNCTION: 3,
+  INFIX: 10,
   APPLY: 20, // Higher precedence than infix operators
 };
 
