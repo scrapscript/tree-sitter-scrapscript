@@ -66,7 +66,7 @@ module.exports = grammar({
         $.id,
         $.hole,
         $.tag,
-        $.parens
+        $.parens,
       ),
 
     parens: ($) => seq("(", field("expr", $._subprogram), ")"),
