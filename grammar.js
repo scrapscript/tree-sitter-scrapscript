@@ -144,17 +144,17 @@ module.exports = grammar({
 
     pattern: ($) =>
       choice(
-        $.id,
-        $.number,
-        $.text,
         $.bytes,
-        $.list,
-        $.record,
-        $.hole,
-        $.tag,
-        $.wildcard,
-        $.parens,
         $.cons,
+        $.hole,
+        $.id,
+        $.list,
+        $.number,
+        $.parens,
+        $.record,
+        $.tag,
+        $.text,
+        $.wildcard,
       ),
 
     cons: $ => prec.right(seq($.pattern, ">+", $.pattern)),
