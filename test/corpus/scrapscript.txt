@@ -599,23 +599,25 @@ tail [1,2,3] ; tail = | first >+ rest -> rest
 ---
 
 (program
-  (apply
-    (id)
-    (list
-      (number)
-      (number)
-      (number)))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (infix
-            (id)
-            (op)
-            (id)))
-        (id)))))
+  (where
+    (apply
+      (id)
+      (list
+        (number)
+        (number)
+        (number)))
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (cons
+              (pattern
+                (id))
+              (pattern
+                (id))))
+          (id))))))
 
 ===========================
 op TEST 5
