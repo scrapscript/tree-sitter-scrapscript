@@ -54,19 +54,19 @@ module.exports = grammar({
 
     _expr: ($) =>
       choice(
-        $.infix,
         $.apply,
-        $.number,
-        $.text,
         $.bytes,
-        $.list,
-        $.record,
         $.fun,
-        $.match_fun,
-        $.id,
         $.hole,
-        $.tag,
+        $.id,
+        $.infix,
+        $.list,
+        $.match_fun,
+        $.number,
         $.parens,
+        $.record,
+        $.tag,
+        $.text,
       ),
 
     parens: ($) => seq("(", field("expr", $._subprogram), ")"),
