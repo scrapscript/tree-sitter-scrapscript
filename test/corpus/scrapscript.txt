@@ -559,37 +559,36 @@ f {x = 4, y = 5} ; f = | {} -> 0 | {x = a, ...} -> a | c -> 1
 ---
 
 (program
-  (apply
-    (id)
-    (record
-      (field
-        (name)
-        (number))
-      (field
-        (name)
-        (number))))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (record))
-        (number))
-      (_arm
-        (pattern
-          (record
-            (field
-              (name)
-              (id))
-            (field
-              (value)
-              (hole))))
+  (where
+    (apply
+      (id)
+      (record
+        (field
+          (id)
+          (number))
+        (field
+          (id)
+          (number))))
+    (declaration
+      (pattern
         (id))
-      (_arm
-        (pattern
+      (match_fun
+        (match_arm
+          (pattern
+            (record))
+          (number))
+        (match_arm
+          (pattern
+            (record
+              (field
+                (id)
+                (id))
+              (field)))
           (id))
-        (number)))))
+        (match_arm
+          (pattern
+            (id))
+          (number))))))
 
 ===========================
 LIST TEST 5
