@@ -25,6 +25,7 @@ module.exports = grammar({
   name: "scrapscript",
   conflicts: ($) => [
     [$._expr, $._callable],
+    [$._expr, $.pattern],
   ],
 
    extras: $ => [
@@ -151,8 +152,11 @@ module.exports = grammar({
         $.hole,
         $.tag,
         $.wildcard,
-        $.parens
+        $.parens,
+        $.cons,
       ),
+
+    cons: $ => prec.right(seq($.pattern, ">+", $.pattern)),
 
     wildcard: _ => "_",
 
