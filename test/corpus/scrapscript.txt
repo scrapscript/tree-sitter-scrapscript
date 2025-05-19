@@ -674,23 +674,21 @@ fun TEST 8
       (op)
       (parens
         (fun
-          (_arm
-            (pattern
-              (id))
-            (infix
-              (id)
-              (op)
-              (number))))))
-    (op)
-    (parens
-      (fun
-        (_arm
           (pattern
             (id))
           (infix
             (id)
             (op)
-            (number)))))))
+            (number)))))
+    (op)
+    (parens
+      (fun
+        (pattern
+          (id))
+        (infix
+          (id)
+          (op)
+          (number))))))
 
 ===========================
 RECORD TEST 6
