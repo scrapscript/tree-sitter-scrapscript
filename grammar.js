@@ -97,7 +97,7 @@ module.exports = grammar({
       ),
 
     apply: ($) =>
-      seq(field("caller", $._callable), field("callee", $._expr)),
+      seq(field("caller", $._callable), field("callee", $._unary)),
 
     infix: ($) =>
       prec.left(
