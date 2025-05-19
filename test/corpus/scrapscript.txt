@@ -768,20 +768,16 @@ x -> rest -> { x, ..rest }
 
 (program
   (fun
-    (_arm
+    (pattern
+      (id))
+    (fun
       (pattern
         (id))
-      (fun
-        (_arm
-          (pattern
-            (id))
-          (record
-            (field
-              (name)
-              (id))
-            (field
-              (value)
-              (id))))))))
+      (record
+        (field
+          (id))
+        (field
+          (id))))))
 
 ===========================
 COMMENT TEST 1
