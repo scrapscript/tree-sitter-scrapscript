@@ -82,7 +82,7 @@ module.exports = grammar({
         $.record,
         $.tag,
         $.text,
-        $.wildcard
+        $.wildcard,
       ),
 
     // The following two rules ensures the left-associativity of the
