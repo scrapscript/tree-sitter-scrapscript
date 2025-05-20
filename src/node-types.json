@@ -3,20 +3,12 @@
     "type": "apply",
     "named": true,
     "fields": {
-      "apply": {
-        "multiple": true,
+      "callee": {
+        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "apply",
-            "named": true
-          },
-          {
             "type": "bytes",
-            "named": true
-          },
-          {
-            "type": "fun",
             "named": true
           },
           {
@@ -25,10 +17,6 @@
           },
           {
             "type": "id",
-            "named": true
-          },
-          {
-            "type": "infix",
             "named": true
           },
           {
@@ -54,9 +42,113 @@
           {
             "type": "text",
             "named": true
+          },
+          {
+            "type": "wildcard",
+            "named": true
+          }
+        ]
+      },
+      "caller": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "apply",
+            "named": true
+          },
+          {
+            "type": "id",
+            "named": true
+          },
+          {
+            "type": "parens",
+            "named": true
           }
         ]
       }
+    }
+  },
+  {
+    "type": "cons",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "apply",
+          "named": true
+        },
+        {
+          "type": "bytes",
+          "named": true
+        },
+        {
+          "type": "fun",
+          "named": true
+        },
+        {
+          "type": "hole",
+          "named": true
+        },
+        {
+          "type": "id",
+          "named": true
+        },
+        {
+          "type": "infix",
+          "named": true
+        },
+        {
+          "type": "list",
+          "named": true
+        },
+        {
+          "type": "match_fun",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "parens",
+          "named": true
+        },
+        {
+          "type": "pattern",
+          "named": true
+        },
+        {
+          "type": "record",
+          "named": true
+        },
+        {
+          "type": "tag",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -73,9 +165,19 @@
           }
         ]
       },
+      "record_wildcard": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "...",
+            "named": false
+          }
+        ]
+      },
       "value": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "apply",
@@ -103,6 +205,10 @@
           },
           {
             "type": "list",
+            "named": true
+          },
+          {
+            "type": "match_fun",
             "named": true
           },
           {
@@ -166,6 +272,10 @@
           "named": true
         },
         {
+          "type": "match_fun",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
@@ -226,6 +336,10 @@
           },
           {
             "type": "list",
+            "named": true
+          },
+          {
+            "type": "match_fun",
             "named": true
           },
           {
@@ -293,6 +407,10 @@
             "named": true
           },
           {
+            "type": "match_fun",
+            "named": true
+          },
+          {
             "type": "number",
             "named": true
           },
@@ -353,6 +471,10 @@
           "named": true
         },
         {
+          "type": "match_fun",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
@@ -370,6 +492,88 @@
         },
         {
           "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "match_arm",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "apply",
+          "named": true
+        },
+        {
+          "type": "bytes",
+          "named": true
+        },
+        {
+          "type": "fun",
+          "named": true
+        },
+        {
+          "type": "hole",
+          "named": true
+        },
+        {
+          "type": "id",
+          "named": true
+        },
+        {
+          "type": "infix",
+          "named": true
+        },
+        {
+          "type": "list",
+          "named": true
+        },
+        {
+          "type": "match_fun",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "parens",
+          "named": true
+        },
+        {
+          "type": "pattern",
+          "named": true
+        },
+        {
+          "type": "record",
+          "named": true
+        },
+        {
+          "type": "tag",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "match_fun",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "match_arm",
           "named": true
         }
       ]
@@ -422,6 +626,10 @@
             "named": true
           },
           {
+            "type": "match_fun",
+            "named": true
+          },
+          {
             "type": "number",
             "named": true
           },
@@ -440,6 +648,10 @@
           {
             "type": "text",
             "named": true
+          },
+          {
+            "type": "where",
+            "named": true
           }
         ]
       }
@@ -455,6 +667,10 @@
       "types": [
         {
           "type": "bytes",
+          "named": true
+        },
+        {
+          "type": "cons",
           "named": true
         },
         {
@@ -487,6 +703,10 @@
         },
         {
           "type": "text",
+          "named": true
+        },
+        {
+          "type": "wildcard",
           "named": true
         }
       ]
@@ -530,6 +750,10 @@
           "named": true
         },
         {
+          "type": "match_fun",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
@@ -547,6 +771,10 @@
         },
         {
           "type": "text",
+          "named": true
+        },
+        {
+          "type": "where",
           "named": true
         }
       ]
@@ -576,15 +804,7 @@
       "required": true,
       "types": [
         {
-          "type": "apply",
-          "named": true
-        },
-        {
           "type": "bytes",
-          "named": true
-        },
-        {
-          "type": "fun",
           "named": true
         },
         {
@@ -593,10 +813,6 @@
         },
         {
           "type": "id",
-          "named": true
-        },
-        {
-          "type": "infix",
           "named": true
         },
         {
@@ -622,13 +838,84 @@
         {
           "type": "text",
           "named": true
+        },
+        {
+          "type": "wildcard",
+          "named": true
         }
       ]
     }
   },
   {
-    "type": " ",
-    "named": false
+    "type": "where",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "apply",
+          "named": true
+        },
+        {
+          "type": "bytes",
+          "named": true
+        },
+        {
+          "type": "declaration",
+          "named": true
+        },
+        {
+          "type": "fun",
+          "named": true
+        },
+        {
+          "type": "hole",
+          "named": true
+        },
+        {
+          "type": "id",
+          "named": true
+        },
+        {
+          "type": "infix",
+          "named": true
+        },
+        {
+          "type": "list",
+          "named": true
+        },
+        {
+          "type": "match_fun",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "parens",
+          "named": true
+        },
+        {
+          "type": "record",
+          "named": true
+        },
+        {
+          "type": "tag",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        },
+        {
+          "type": "where",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "!",
@@ -796,6 +1083,10 @@
   },
   {
     "type": "text",
+    "named": true
+  },
+  {
+    "type": "wildcard",
     "named": true
   },
   {

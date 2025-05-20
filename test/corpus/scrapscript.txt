@@ -74,9 +74,20 @@ TEXT TEST 3
 
 (program
   (infix
-    (text)
-    (op)
-    (text)))
+    left: (text)
+    op: (op)
+    right: (text)))
+
+===========================
+TEXT TEST 4
+===========================
+
+"hello--sly--world"
+
+---
+
+(program
+  (text))
 
 ===========================
 LIST TEST 1
@@ -131,11 +142,11 @@ RECORD TEST 1
 (program
   (record
     (field
-      (name)
-      (number))
+      name: (id)
+      value: (number))
     (field
-      (name)
-      (text))))
+      name: (id)
+      value: (text))))
 
 ===========================
 RECORD TEST 2
@@ -148,8 +159,7 @@ RECORD TEST 2
 (program
   (record
     (field
-      (value)
-      (id))))
+      value: (id))))
 
 ===========================
 RECORD TEST 3
@@ -169,17 +179,17 @@ rec.a
 fun TEST 1
 ===========================
 
-| "a" -> 1 | "b" -> 2 |
+| "a" -> 1 | "b" -> 2
 
 ---
 
 (program
-  (fun
-    (_arm
+  (match_fun
+    (match_arm
       (pattern
         (text))
       (number))
-    (_arm
+    (match_arm
       (pattern
         (text))
       (number))))
@@ -193,29 +203,30 @@ f "b" ; f = | "a" -> 1 | "b" -> 2 | "c" -> 3 | x -> 0
 ---
 
 (program
-  (apply
-    (id)
-    (text))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (text))
-        (number))
-      (_arm
-        (pattern
-          (text))
-        (number))
-      (_arm
-        (pattern
-          (text))
-        (number))
-      (_arm
-        (pattern
-          (id))
-        (number)))))
+  (where
+    (apply
+      (id)
+      (text))
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (text))
+          (number))
+        (match_arm
+          (pattern
+            (text))
+          (number))
+        (match_arm
+          (pattern
+            (text))
+          (number))
+        (match_arm
+          (pattern
+            (id))
+          (number))))))
 
 ===========================
 op TEST 1
@@ -265,14 +276,73 @@ fun TEST 3
   (apply
     (parens
       (fun
-        (_arm
-          (pattern
-            (id))
+        (pattern
+          (id))
+        (infix
+          (id)
+          (op)
+          (id))))
+    (number)))
+
+===========================
+WHERE TEST 1
+===========================
+
+a + b + c ; a = 1 ; b = 2 ; c = 3
+
+---
+
+(program
+  (where
+    (where
+      (where
+        (infix
           (infix
             (id)
             (op)
-            (id)))))
-    (number)))
+            (id))
+          (op)
+          (id))
+        (declaration
+          (pattern
+            (id))
+          (number)))
+      (declaration
+        (pattern
+          (id))
+        (number)))
+    (declaration
+      (pattern
+        (id))
+      (number))))
+
+===========================
+WHERE TEST 2
+===========================
+
+x; x : t = 1 ; y : t = 2 ; t : int
+
+---
+
+(program
+  (where
+    (where
+      (where
+        (id)
+        (declaration
+          (pattern
+            (id))
+          (id)
+          (number)))
+      (declaration
+        (pattern
+          (id))
+        (id)
+        (number)))
+    (declaration
+      (pattern
+        (id))
+      (id))))
 
 ===========================
 RECORD TEST 4
@@ -285,10 +355,10 @@ RECORD TEST 4
 (program
   (record
     (field
-      (name)
-      (tag
-        (id)
-        (number)))))
+      name: (id)
+      value: (tag
+               (id)
+               (number)))))
 
 ===========================
 op TEST 2
@@ -328,12 +398,12 @@ RECORD TEST 5
 
 (program
   (infix
-    (record
-      (field
-        (name)
-        (number)))
-    (op)
-    (id)))
+    left: (record
+            (field
+              name: (id)
+              value: (number)))
+    op: (op)
+    right: (id)))
 
 ===========================
 LIST TEST 4
@@ -363,22 +433,22 @@ fun TEST 4
 ---
 
 (program
-  (fun
-    (_arm
+  (match_fun
+    (match_arm
       (pattern
         (tag
           (id)
-          (hole)))
+          (wildcard)))
       (number))
-    (_arm
+    (match_arm
       (pattern
         (tag
           (id)
           (number)))
       (number))
-    (_arm
+    (match_arm
       (pattern
-        (hole))
+        (wildcard))
       (number))))
 
 ===========================
@@ -407,42 +477,44 @@ f (#add {x = 3, y = 4}) ; f = | #b () -> "foo" | #add {x = x, y = y} -> x + y
 ---
 
 (program
-  (apply
-    (id)
-    (tag
-      (id)
-      (record
-        (field
-          (name)
-          (number))
-        (field
-          (name)
-          (number)))))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (tag
-            (id)
-            (hole)))
-        (text))
-      (_arm
-        (pattern
-          (tag
-            (id)
-            (record
-              (field
-                (name)
-                (id))
-              (field
-                (name)
-                (id)))))
-        (infix
-          (id)
-          (op)
-          (id))))))
+  (where
+    (apply
+      caller: (id)
+      callee: (parens
+                expr: (tag
+                        (id)
+                        (record
+                          (field
+                            name: (id)
+                            value: (number))
+                          (field
+                            name: (id)
+                            value: (number))))))
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (tag
+              (id)
+              (hole)))
+          (text))
+        (match_arm
+          (pattern
+            (tag
+              (id)
+              (record
+                (field
+                  name: (id)
+                  value: (id))
+                (field
+                  name: (id)
+                  value: (id)))))
+          (infix
+            left: (id)
+            op: (op)
+            right: (id)))))))
 
 ===========================
 fun TEST 6
@@ -453,29 +525,30 @@ say (1 < 2) ; say = | #false () -> "oh no" | #true () -> "omg"
 ---
 
 (program
-  (apply
-    (id)
-    (parens
-      (infix
-        (number)
-        (op)
-        (number))))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (tag
-            (id)
-            (hole)))
-        (text))
-      (_arm
-        (pattern
-          (tag
-            (id)
-            (hole)))
-        (text)))))
+  (where
+    (apply
+      (id)
+      (parens
+        (infix
+          (number)
+          (op)
+          (number))))
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (tag
+              (id)
+              (hole)))
+          (text))
+        (match_arm
+          (pattern
+            (tag
+              (id)
+              (hole)))
+          (text))))))
 
 ===========================
 fun TEST 7
@@ -486,37 +559,36 @@ f {x = 4, y = 5} ; f = | {} -> 0 | {x = a, ...} -> a | c -> 1
 ---
 
 (program
-  (apply
-    (id)
-    (record
-      (field
-        (name)
-        (number))
-      (field
-        (name)
-        (number))))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (record))
-        (number))
-      (_arm
-        (pattern
-          (record
-            (field
-              (name)
-              (id))
-            (field
-              (value)
-              (hole))))
+  (where
+    (apply
+      (id)
+      (record
+        (field
+          (id)
+          (number))
+        (field
+          (id)
+          (number))))
+    (declaration
+      (pattern
         (id))
-      (_arm
-        (pattern
+      (match_fun
+        (match_arm
+          (pattern
+            (record))
+          (number))
+        (match_arm
+          (pattern
+            (record
+              (field
+                (id)
+                (id))
+              (field)))
           (id))
-        (number)))))
+        (match_arm
+          (pattern
+            (id))
+          (number))))))
 
 ===========================
 LIST TEST 5
@@ -527,23 +599,25 @@ tail [1,2,3] ; tail = | first >+ rest -> rest
 ---
 
 (program
-  (apply
-    (id)
-    (list
-      (number)
-      (number)
-      (number)))
-  (apply
-    (id)
-    (op)
-    (fun
-      (_arm
-        (pattern
-          (infix
-            (id)
-            (op)
-            (id)))
-        (id)))))
+  (where
+    (apply
+      (id)
+      (list
+        (number)
+        (number)
+        (number)))
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (cons
+              (pattern
+                (id))
+              (pattern
+                (id))))
+          (id))))))
 
 ===========================
 op TEST 5
@@ -600,23 +674,21 @@ fun TEST 8
       (op)
       (parens
         (fun
-          (_arm
-            (pattern
-              (id))
-            (infix
-              (id)
-              (op)
-              (number))))))
-    (op)
-    (parens
-      (fun
-        (_arm
           (pattern
             (id))
           (infix
             (id)
             (op)
-            (number)))))))
+            (number)))))
+    (op)
+    (parens
+      (fun
+        (pattern
+          (id))
+        (infix
+          (id)
+          (op)
+          (number))))))
 
 ===========================
 RECORD TEST 6
@@ -629,13 +701,13 @@ RECORD TEST 6
 (program
   (record
     (field
-      (name)
-      (list
-        (number)
-        (record
-          (field
-            (name)
-            (number)))))))
+      name: (id)
+      value: (list
+               (number)
+               (record
+                 (field
+                   name: (id)
+                   value: (number)))))))
 
 ===========================
 LIST TEST 6
@@ -665,11 +737,11 @@ RECORD TEST 7
 (program
   (record
     (field
-      (name)
-      (record
-        (field
-          (name)
-          (number))))))
+      name: (id)
+      value: (record
+               (field
+                 name: (id)
+                 value: (number))))))
 
 ===========================
 NUMBER TEST 3
@@ -696,20 +768,16 @@ x -> rest -> { x, ..rest }
 
 (program
   (fun
-    (_arm
+    (pattern
+      (id))
+    (fun
       (pattern
         (id))
-      (fun
-        (_arm
-          (pattern
-            (id))
-          (record
-            (field
-              (name)
-              (id))
-            (field
-              (value)
-              (id))))))))
+      (record
+        (field
+          (id))
+        (field
+          (id))))))
 
 ===========================
 COMMENT TEST 1
@@ -734,17 +802,15 @@ f -> g -> f >> g
 
 (program
   (fun
-    (_arm
+    (pattern
+      (id))
+    (fun
       (pattern
         (id))
-      (fun
-        (_arm
-          (pattern
-            (id))
-          (infix
-            (id)
-            (op)
-            (id)))))))
+      (infix
+        (id)
+        (op)
+        (id)))))
 
 ===========================
 RECORD TEST 8
@@ -755,14 +821,15 @@ r.a ; r = { a = 1 }
 ---
 
 (program
-  (infix
-    (id)
-    (op)
-    (id))
-  (apply
-    (id)
-    (op)
-    (record
-      (field
-        (name)
-        (number)))))
+  (where
+    (infix
+      (id)
+      (op)
+      (id))
+    (declaration
+      (pattern
+        (id))
+      (record
+        (field
+          (id)
+          (number))))))

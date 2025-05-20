@@ -2,7 +2,7 @@
 ;; Tree-sitter query for syntax highlighting
 
 ;; Identifiers
-(identifier) @variable
+(id) @variable
 
 ;; Literals
 (number) @number

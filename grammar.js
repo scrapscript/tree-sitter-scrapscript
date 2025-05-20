@@ -12,8 +12,8 @@ const PREC = {
   STRING: 2,
   FIELD_ACCESS: 1,
   PART: 1,
-  FUNCTION: 10,
-  INFIX: 2,
+  FUNCTION: 3,
+  INFIX: 10,
   APPLY: 20, // Higher precedence than infix operators
 };
 
@@ -24,34 +24,81 @@ function sepBy(rule, sep) {
 module.exports = grammar({
   name: "scrapscript",
   conflicts: ($) => [
-    [$.apply, $.infix, $._arm],
-    [$.tag, $.parens],
-    [$.apply, $.infix, $.tag],
+    [$._expr, $._callable],
+    [$._expr, $.pattern],
   ],
 
+   extras: $ => [
+     $._whitespace,
+     $._line_comment,
+   ],
+ 
   rules: {
-    program: ($) => $._expr,
+    program: ($) => $._subprogram,
+
+    // The following two rules ensure the left-associativity of the
+    // "where" declaration syntax production
+    _subprogram: $ => choice($._expr, $.where),
+
+    where: $ => seq($._subprogram, ";", $.declaration),
+
+    declaration: $ => choice($._annotation, $._binding),
+
+    _annotation: $ => seq($.pattern, ":", $.id),
+
+    _binding: $ => choice(seq($.pattern, "=", $._expr), seq($._annotation, "=", $._expr)),
+
+    _whitespace: _ => /\s+/,
+
+    _line_comment: _ => /--.*/,
 
     _expr: ($) =>
       choice(
-        $.infix,
         $.apply,
-        $.number,
-        $.text,
         $.bytes,
-        $.list,
-        $.record,
         $.fun,
-        $.id,
         $.hole,
+        $.id,
+        $.infix,
+        $.list,
+        $.match_fun,
+        $.number,
+        $.parens,
+        $.record,
         $.tag,
+        $.text,
+      ),
+
+    parens: ($) => seq("(", field("expr", $._subprogram), ")"),
+
+    _unary: $ =>
+      choice(
+        $.bytes,
+        $.hole,
+        $.id,
+        $.list,
+        $.number,
+        $.parens,
+        $.record,
+        $.tag,
+        $.text,
+        $.wildcard,
+      ),
+
+    // The following two rules ensures the left-associativity of the
+    // partial function application syntax production
+    _callable: $ =>
+      choice(
+        // $._callable doesn't include the following syntactically ambiguous
+        // constructs like $.fun and $.match_fun.
+        // [TODO]: Support record access
+        $.apply,
+        $.id,
         $.parens
       ),
 
-    parens: ($) => seq("(", field("expr", $._expr), ")"),
-
     apply: ($) =>
-      prec.left(PREC.APPLY, field("apply", seq($._expr, repeat1($._expr)))),
+      seq(field("caller", $._callable), field("callee", $._unary)),
 
     infix: ($) =>
       prec.left(
@@ -59,7 +106,7 @@ module.exports = grammar({
         seq(field("left", $._expr), field("op", $.op), field("right", $._expr))
       ),
 
-    number: ($) => choice(/[0-9]+/, /[0-9]+\.[0-9]+/),
+    number: ($) => seq(optional("-"), choice(/[0-9]+/, /[0-9]+\.[0-9]+/)),
 
     text: ($) => /"[^"]*"/,
 
@@ -71,39 +118,52 @@ module.exports = grammar({
 
     hole: ($) => "()",
 
-    tag: ($) => prec.right(5, seq("#", $.id, optional($._expr))),
+    tag: ($) => prec.right(5, seq("#", $.id, optional($._unary))),
 
     record: ($) => seq("{", optional(sepBy($.field, ",")), "}"),
 
     field: ($) =>
       choice(
+        field("name", $.id),
         seq(field("name", $.id), "=", field("value", $._expr)),
         seq("..", field("value", $._expr)),
-        seq("...", field("value", $._expr))
+        field("record_wildcard", "...")
       ),
 
+    // [TODO]: Do we want nested where clauses within regular
+    // functions and match functions?
+    // If so, we can use $._subprogram instead of $._expr in the
+    // two productions below
     fun: ($) =>
-      prec.right(PREC.FUNCTION, seq("|", $._arm, repeat(seq("|", $._arm)))),
+      prec.right(PREC.FUNCTION, seq($.pattern, "->", $._expr)),
 
-    _arm: ($) => prec.right(PREC.FUNCTION + 1, seq($.pattern, "->", $._expr)),
+    match_fun: ($) =>
+      prec.right(PREC.FUNCTION, seq("|", $.match_arm, repeat(seq("|", $.match_arm)))),
+
+    match_arm: ($) => prec.right(PREC.FUNCTION + 1, seq($.pattern, "->", $._expr)),
 
     pattern: ($) =>
       choice(
-        $.id,
-        $.number,
-        $.text,
         $.bytes,
-        $.list,
-        $.record,
+        $.cons,
         $.hole,
+        $.id,
+        $.list,
+        $.number,
+        $.parens,
+        $.record,
         $.tag,
-        $.parens
+        $.text,
+        $.wildcard,
       ),
+
+    cons: $ => prec.right(seq($.pattern, ">+", $.pattern)),
+
+    wildcard: _ => "_",
 
     op: ($) =>
       choice(
         "|>",
-        "|",
         "==",
         "/=",
         "<",
@@ -121,7 +181,6 @@ module.exports = grammar({
         "::",
         "..",
         "@",
-        " ",
         ">>",
         "<<",
         "^",
@@ -130,14 +189,10 @@ module.exports = grammar({
         ">+",
         "+<",
         "'",
-        "#",
-        "->",
         ":",
-        "=",
         "?",
         "!",
         ".",
-        ";"
       ),
   },
 });
