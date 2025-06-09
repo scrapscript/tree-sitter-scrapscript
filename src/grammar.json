@@ -118,19 +118,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "infix"
-        },
-        {
-          "type": "SYMBOL",
           "name": "apply"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "number"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "text"
         },
         {
           "type": "SYMBOL",
@@ -138,23 +126,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "list"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "record"
-        },
-        {
-          "type": "SYMBOL",
           "name": "fun"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "match_fun"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "id"
         },
         {
           "type": "SYMBOL",
@@ -162,11 +134,39 @@
         },
         {
           "type": "SYMBOL",
-          "name": "tag"
+          "name": "id"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "infix"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "match_fun"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number"
         },
         {
           "type": "SYMBOL",
           "name": "parens"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "record"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "tag"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "text"
         }
       ]
     },
@@ -625,27 +625,11 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "id"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "number"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "text"
-        },
-        {
-          "type": "SYMBOL",
           "name": "bytes"
         },
         {
           "type": "SYMBOL",
-          "name": "list"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "record"
+          "name": "cons"
         },
         {
           "type": "SYMBOL",
@@ -653,11 +637,15 @@
         },
         {
           "type": "SYMBOL",
-          "name": "tag"
+          "name": "id"
         },
         {
           "type": "SYMBOL",
-          "name": "wildcard"
+          "name": "list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number"
         },
         {
           "type": "SYMBOL",
@@ -665,7 +653,19 @@
         },
         {
           "type": "SYMBOL",
-          "name": "cons"
+          "name": "record"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "tag"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "text"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "wildcard"
         }
       ]
     },
@@ -843,6 +843,5 @@
   "precedences": [],
   "externals": [],
   "inline": [],
-  "supertypes": [],
-  "reserved": {}
+  "supertypes": []
 }
