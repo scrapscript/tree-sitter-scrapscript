@@ -143,7 +143,6 @@ module.exports = grammar({
         field("name", $.id),
         seq(field("name", $.id), "=", field("value", $._expr)),
         seq("..", field("value", $._expr)),
-        field("record_wildcard", "...")
       ),
 
     // [TODO]: Do we want nested where clauses within regular
