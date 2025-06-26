@@ -541,15 +541,17 @@ say (1 < 2) ; say = | #false () -> "oh no" | #true () -> "omg"
       (match_fun
         (match_arm
           (pattern
-            (tag
+            (tag_pattern
               (id)
-              (hole)))
+              (pattern
+                (hole))))
           (text))
         (match_arm
           (pattern
-            (tag
+            (tag_pattern
               (id)
-              (hole)))
+              (pattern
+                (hole))))
           (text))))))
 
 ===========================
