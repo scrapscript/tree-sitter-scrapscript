@@ -114,7 +114,7 @@ module.exports = grammar({
 
     list: ($) => seq("[", sepBy($._expr, ","), "]"),
 
-    id: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    id: ($) => /[a-zA-Z_][a-zA-Z0-9_-]*/,
 
     hole: ($) => "()",
 
@@ -140,7 +140,9 @@ module.exports = grammar({
     match_fun: ($) =>
       prec.right(PREC.FUNCTION, seq("|", $.match_arm, repeat(seq("|", $.match_arm)))),
 
-    match_arm: ($) => prec.right(PREC.FUNCTION + 1, seq($.pattern, "->", $._expr)),
+    match_arm: ($) => prec.right(PREC.FUNCTION + 1, seq($._guardable_pattern, "->", $._expr)),
+
+    _guardable_pattern: ($) => seq($.pattern, optional(seq("?", field("guard", $._expr)))),
 
     pattern: ($) =>
       choice(
