@@ -27,6 +27,11 @@ module.exports = grammar({
     [$._expr, $._callable],
     [$._expr, $.pattern],
     [$.type_declaration, $.pattern],
+    [$.record, $.record_pattern],
+    [$.field, $.field_pattern],
+    [$._expr, $.field_pattern],
+    [$.tag, $.tag_pattern],
+    [$._unary, $.pattern],
   ],
 
    extras: $ => [
@@ -168,10 +173,22 @@ module.exports = grammar({
         $.list,
         $.number,
         $.parens,
-        $.record,
-        $.tag,
+        $.record_pattern,
+        $.tag_pattern,
         $.text,
         $.wildcard,
+      ),
+
+    tag_pattern: ($) => prec.right(5, seq("#", $.id, optional($.pattern))),
+
+    record_pattern: ($) => seq("{", optional(sepBy($.field_pattern, ",")), "}"),
+
+    field_pattern: ($) =>
+      choice(
+        field("name", $.id),
+        seq(field("name", $.id), "=", $.pattern),
+        seq("..", field("record_spread", $.id)),
+        field("record_wildcard", "...")
       ),
 
     cons: $ => prec.right(seq($.pattern, ">+", $.pattern)),
