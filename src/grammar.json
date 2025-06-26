@@ -31,8 +31,155 @@
           "value": ";"
         },
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "type_declaration"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "declaration"
+            }
+          ]
+        }
+      ]
+    },
+    "type_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
           "type": "SYMBOL",
-          "name": "declaration"
+          "name": "id"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_data_type"
+        }
+      ]
+    },
+    "_data_type": {
+      "type": "PREC_RIGHT",
+      "value": 3,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "|"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "tagged_data_record"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "|"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "tagged_data_record"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "tagged_data_record": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "id"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "data_record"
+        }
+      ]
+    },
+    "data_record": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "data_member"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ","
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "data_member"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "data_member": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "id"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "id"
+          }
         }
       ]
     },
@@ -122,6 +269,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "byte"
+        },
+        {
+          "type": "SYMBOL",
           "name": "bytes"
         },
         {
@@ -194,6 +345,10 @@
     "_unary": {
       "type": "CHOICE",
       "members": [
+        {
+          "type": "SYMBOL",
+          "name": "byte"
+        },
         {
           "type": "SYMBOL",
           "name": "bytes"
@@ -341,6 +496,10 @@
       "type": "PATTERN",
       "value": "\"[^\"]*\""
     },
+    "byte": {
+      "type": "PATTERN",
+      "value": "~[A-Fa-f0-9]{2}"
+    },
     "bytes": {
       "type": "PATTERN",
       "value": "~~[A-Za-z0-9+/=]+"
@@ -393,7 +552,7 @@
     },
     "id": {
       "type": "PATTERN",
-      "value": "[a-zA-Z_][a-zA-Z0-9_]*"
+      "value": "(\\$\\$)?[a-zA-Z_][a-zA-Z0-9_\\/\\-]*"
     },
     "hole": {
       "type": "STRING",
@@ -527,21 +686,13 @@
             },
             {
               "type": "FIELD",
-              "name": "value",
+              "name": "record_spread",
               "content": {
                 "type": "SYMBOL",
                 "name": "_expr"
               }
             }
           ]
-        },
-        {
-          "type": "FIELD",
-          "name": "record_wildcard",
-          "content": {
-            "type": "STRING",
-            "value": "..."
-          }
         }
       ]
     },
@@ -607,7 +758,7 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "pattern"
+            "name": "_guardable_pattern"
           },
           {
             "type": "STRING",
@@ -620,9 +771,47 @@
         ]
       }
     },
+    "_guardable_pattern": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "pattern"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "?"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "guard",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_expr"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
     "pattern": {
       "type": "CHOICE",
       "members": [
+        {
+          "type": "SYMBOL",
+          "name": "byte"
+        },
         {
           "type": "SYMBOL",
           "name": "bytes"
@@ -653,11 +842,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "record"
+          "name": "record_pattern"
         },
         {
           "type": "SYMBOL",
-          "name": "tag"
+          "name": "tag_pattern"
         },
         {
           "type": "SYMBOL",
@@ -666,6 +855,148 @@
         {
           "type": "SYMBOL",
           "name": "wildcard"
+        }
+      ]
+    },
+    "tag_pattern": {
+      "type": "PREC_RIGHT",
+      "value": 5,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "#"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "id"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "pattern"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "record_pattern": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "field_pattern"
+                    },
+                    {
+                      "type": "REPEAT",
+                      "content": {
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": ","
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "field_pattern"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "field_pattern": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "id"
+          }
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "name",
+              "content": {
+                "type": "SYMBOL",
+                "name": "id"
+              }
+            },
+            {
+              "type": "STRING",
+              "value": "="
+            },
+            {
+              "type": "SYMBOL",
+              "name": "pattern"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": ".."
+            },
+            {
+              "type": "FIELD",
+              "name": "record_spread",
+              "content": {
+                "type": "SYMBOL",
+                "name": "id"
+              }
+            }
+          ]
+        },
+        {
+          "type": "FIELD",
+          "name": "record_wildcard",
+          "content": {
+            "type": "STRING",
+            "value": "..."
+          }
         }
       ]
     },
@@ -837,6 +1168,30 @@
     ],
     [
       "_expr",
+      "pattern"
+    ],
+    [
+      "type_declaration",
+      "pattern"
+    ],
+    [
+      "record",
+      "record_pattern"
+    ],
+    [
+      "field",
+      "field_pattern"
+    ],
+    [
+      "_expr",
+      "field_pattern"
+    ],
+    [
+      "tag",
+      "tag_pattern"
+    ],
+    [
+      "_unary",
       "pattern"
     ]
   ],
