@@ -159,7 +159,7 @@ RECORD TEST 2
 (program
   (record
     (field
-      value: (id))))
+      record_spread: (id))))
 
 ===========================
 RECORD TEST 3
