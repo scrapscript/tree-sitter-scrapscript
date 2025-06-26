@@ -563,29 +563,30 @@ f {x = 4, y = 5} ; f = | {} -> 0 | {x = a, ...} -> a | c -> 1
 (program
   (where
     (apply
-      (id)
-      (record
-        (field
-          (id)
-          (number))
-        (field
-          (id)
-          (number))))
+      caller: (id)
+      callee: (record
+                (field
+                  name: (id)
+                  value: (number))
+                (field
+                  name: (id)
+                  value: (number))))
     (declaration
       (pattern
         (id))
       (match_fun
         (match_arm
           (pattern
-            (record))
+            (record_pattern))
           (number))
         (match_arm
           (pattern
-            (record
-              (field
-                (id)
-                (id))
-              (field)))
+            (record_pattern
+              (field_pattern
+                name: (id)
+                (pattern
+                  (id)))
+              (field_pattern)))
           (id))
         (match_arm
           (pattern
