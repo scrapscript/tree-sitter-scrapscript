@@ -26,6 +26,7 @@ module.exports = grammar({
   conflicts: ($) => [
     [$._expr, $._callable],
     [$._expr, $.pattern],
+    [$.type_declaration, $.pattern],
   ],
 
    extras: $ => [
@@ -40,7 +41,21 @@ module.exports = grammar({
     // "where" declaration syntax production
     _subprogram: $ => choice($._expr, $.where),
 
-    where: $ => seq($._subprogram, ";", $.declaration),
+    where: $ => seq($._subprogram, ";", choice($.type_declaration, $.declaration)),
+
+    type_declaration: $ => seq($.id, ":", $._data_type),
+
+    _data_type: ($) =>
+      prec.right(
+        PREC.FUNCTION,
+        seq("|", $.tagged_data_record, repeat(seq("|", $.tagged_data_record)))
+      ),
+
+    tagged_data_record: ($) => seq("#", $.id, $.data_record),
+
+    data_record: ($) => seq("{", sepBy($.data_member, ","), "}"),
+
+    data_member: ($) => seq(field("name", $.id), ":", field("type", $.id)),
 
     declaration: $ => choice($._annotation, $._binding),
 
