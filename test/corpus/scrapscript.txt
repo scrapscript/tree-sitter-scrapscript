@@ -1064,3 +1064,23 @@ process-response
           (tag
             (id)
             (hole)))))))
+
+===========================
+native TEST 1
+===========================
+
+native-add; native-add = $$add 5 10
+
+---
+
+(program
+  (where
+    (id)
+    (declaration
+      (pattern
+        (id))
+      (apply
+        (apply
+          (id)
+          (number))
+        (number)))))
