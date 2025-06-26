@@ -963,3 +963,95 @@ shape
           (data_member
             name: (id)
             type: (id)))))))
+
+===========================
+fun TEST 11
+===========================
+
+process-response
+; process-response =
+    | #ok { status = 200, data = content } -> #success content
+    | #ok { status = 404, data = _ } -> #not-found ()
+    | #ok { status = s, data = _ } ? s >= 500 -> #server-error s
+    | #error msg -> #failure msg
+    | _ -> #unknown ()
+
+---
+
+(program
+  (where
+    (id)
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (tag_pattern
+              (id)
+              (pattern
+                (record_pattern
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (number)))
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (id)))))))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (tag_pattern
+              (id)
+              (pattern
+                (record_pattern
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (number)))
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (wildcard)))))))
+          (tag
+            (id)
+            (hole)))
+        (match_arm
+          (pattern
+            (tag_pattern
+              (id)
+              (pattern
+                (record_pattern
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (id)))
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (wildcard)))))))
+          guard: (infix
+                   left: (id)
+                   op: (op)
+                   right: (number))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (tag_pattern
+              (id)
+              (pattern
+                (id))))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (wildcard))
+          (tag
+            (id)
+            (hole)))))))
