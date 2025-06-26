@@ -833,3 +833,56 @@ r.a ; r = { a = 1 }
         (field
           (id)
           (number))))))
+
+===========================
+guard TEST 1
+===========================
+
+classify-number
+; classify-number = 
+    | 0 -> #zero ()
+    | n ? n < 0 -> #negative n
+    | n ? n > 100 -> #large n
+    | n -> #normal n
+
+---
+
+(program
+  (where
+    (id)
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (number))
+          (tag
+            (id)
+            (hole)))
+        (match_arm
+          (pattern
+            (id))
+          guard: (infix
+                   left: (id)
+                   op: (op)
+                   right: (number))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (id))
+          guard: (infix
+                   left: (id)
+                   op: (op)
+                   right: (number))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (id))
+          (tag
+            (id)
+            (id)))))))
