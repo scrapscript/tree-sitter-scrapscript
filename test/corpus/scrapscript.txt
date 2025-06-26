@@ -436,15 +436,17 @@ fun TEST 4
   (match_fun
     (match_arm
       (pattern
-        (tag
+        (tag_pattern
           (id)
-          (wildcard)))
+          (pattern
+            (wildcard))))
       (number))
     (match_arm
       (pattern
-        (tag
+        (tag_pattern
           (id)
-          (number)))
+          (pattern
+            (number))))
       (number))
     (match_arm
       (pattern
