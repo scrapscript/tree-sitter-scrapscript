@@ -53,6 +53,7 @@ module.exports = grammar({
 
     tagged_data_record: ($) => seq("#", $.id, $.data_record),
 
+    // [TODO]: Do we want empty records?
     data_record: ($) => seq("{", sepBy($.data_member, ","), "}"),
 
     data_member: ($) => seq(field("name", $.id), ":", field("type", $.id)),
