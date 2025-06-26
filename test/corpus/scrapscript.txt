@@ -921,3 +921,45 @@ f
       (pattern
         (id))
       (id))))
+
+===========================
+type declaration TEST 1
+===========================
+
+shape
+; shape :
+    | #circle { radius : float }
+    | #rectangle { width : float, height : float }
+    | #triangle { base : float, height : float }
+
+---
+
+(program
+  (where
+    (id)
+    (type_declaration
+      (id)
+      (tagged_data_record
+        (id)
+        (data_record
+          (data_member
+            name: (id)
+            type: (id))))
+      (tagged_data_record
+        (id)
+        (data_record
+          (data_member
+            name: (id)
+            type: (id))
+          (data_member
+            name: (id)
+            type: (id))))
+      (tagged_data_record
+        (id)
+        (data_record
+          (data_member
+            name: (id)
+            type: (id))
+          (data_member
+            name: (id)
+            type: (id)))))))
