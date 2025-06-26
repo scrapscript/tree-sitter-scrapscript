@@ -886,3 +886,38 @@ classify-number
           (tag
             (id)
             (id)))))))
+
+===========================
+built-ins TEST 1
+===========================
+
+f
+; f = list/map
+; g = list/filter
+; h = maybe/default
+; k = result/bind
+
+---
+
+(program
+  (where
+    (where
+      (where
+        (where
+          (id)
+          (declaration
+            (pattern
+              (id))
+            (id)))
+        (declaration
+          (pattern
+            (id))
+          (id)))
+      (declaration
+        (pattern
+          (id))
+        (id)))
+    (declaration
+      (pattern
+        (id))
+      (id))))
