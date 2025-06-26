@@ -114,7 +114,7 @@ module.exports = grammar({
 
     list: ($) => seq("[", sepBy($._expr, ","), "]"),
 
-    id: ($) => /[a-zA-Z_][a-zA-Z0-9_-]*/,
+    id: ($) => /[a-zA-Z_][a-zA-Z0-9_\/\-]*/,
 
     hole: ($) => "()",
 
