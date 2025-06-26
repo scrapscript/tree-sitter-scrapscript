@@ -498,21 +498,25 @@ f (#add {x = 3, y = 4}) ; f = | #b () -> "foo" | #add {x = x, y = y} -> x + y
       (match_fun
         (match_arm
           (pattern
-            (tag
+            (tag_pattern
               (id)
-              (hole)))
+              (pattern
+                (hole))))
           (text))
         (match_arm
           (pattern
-            (tag
+            (tag_pattern
               (id)
-              (record
-                (field
-                  name: (id)
-                  value: (id))
-                (field
-                  name: (id)
-                  value: (id)))))
+              (pattern
+                (record_pattern
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (id)))
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (id)))))))
           (infix
             left: (id)
             op: (op)
