@@ -76,6 +76,7 @@ module.exports = grammar({
     _expr: ($) =>
       choice(
         $.apply,
+        $.byte,
         $.bytes,
         $.fun,
         $.hole,
@@ -94,6 +95,7 @@ module.exports = grammar({
 
     _unary: $ =>
       choice(
+        $.byte,
         $.bytes,
         $.hole,
         $.id,
@@ -131,6 +133,8 @@ module.exports = grammar({
 
     text: ($) => /"[^"]*"/,
 
+    byte: ($) => /~[A-Fa-f0-9]{2}/,
+
     bytes: ($) => /~~[A-Za-z0-9+/=]+/,
 
     list: ($) => seq("[", sepBy($._expr, ","), "]"),
@@ -166,6 +170,7 @@ module.exports = grammar({
 
     pattern: ($) =>
       choice(
+        $.byte,
         $.bytes,
         $.cons,
         $.hole,
