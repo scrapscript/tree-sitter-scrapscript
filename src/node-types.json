@@ -8,6 +8,10 @@
         "required": true,
         "types": [
           {
+            "type": "byte",
+            "named": true
+          },
+          {
             "type": "bytes",
             "named": true
           },
@@ -85,6 +89,47 @@
     }
   },
   {
+    "type": "data_member",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "data_record",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "data_member",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "declaration",
     "named": true,
     "fields": {},
@@ -94,6 +139,10 @@
       "types": [
         {
           "type": "apply",
+          "named": true
+        },
+        {
+          "type": "byte",
           "named": true
         },
         {
@@ -165,13 +214,65 @@
           }
         ]
       },
-      "record_wildcard": {
+      "record_spread": {
         "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "...",
-            "named": false
+            "type": "apply",
+            "named": true
+          },
+          {
+            "type": "byte",
+            "named": true
+          },
+          {
+            "type": "bytes",
+            "named": true
+          },
+          {
+            "type": "fun",
+            "named": true
+          },
+          {
+            "type": "hole",
+            "named": true
+          },
+          {
+            "type": "id",
+            "named": true
+          },
+          {
+            "type": "infix",
+            "named": true
+          },
+          {
+            "type": "list",
+            "named": true
+          },
+          {
+            "type": "match_fun",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "parens",
+            "named": true
+          },
+          {
+            "type": "record",
+            "named": true
+          },
+          {
+            "type": "tag",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
           }
         ]
       },
@@ -181,6 +282,10 @@
         "types": [
           {
             "type": "apply",
+            "named": true
+          },
+          {
+            "type": "byte",
             "named": true
           },
           {
@@ -236,6 +341,52 @@
     }
   },
   {
+    "type": "field_pattern",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "id",
+            "named": true
+          }
+        ]
+      },
+      "record_spread": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "id",
+            "named": true
+          }
+        ]
+      },
+      "record_wildcard": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "...",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "fun",
     "named": true,
     "fields": {},
@@ -245,6 +396,10 @@
       "types": [
         {
           "type": "apply",
+          "named": true
+        },
+        {
+          "type": "byte",
           "named": true
         },
         {
@@ -312,6 +467,10 @@
         "types": [
           {
             "type": "apply",
+            "named": true
+          },
+          {
+            "type": "byte",
             "named": true
           },
           {
@@ -383,6 +542,10 @@
             "named": true
           },
           {
+            "type": "byte",
+            "named": true
+          },
+          {
             "type": "bytes",
             "named": true
           },
@@ -447,6 +610,10 @@
           "named": true
         },
         {
+          "type": "byte",
+          "named": true
+        },
+        {
           "type": "bytes",
           "named": true
         },
@@ -500,13 +667,80 @@
   {
     "type": "match_arm",
     "named": true,
-    "fields": {},
+    "fields": {
+      "guard": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "apply",
+            "named": true
+          },
+          {
+            "type": "byte",
+            "named": true
+          },
+          {
+            "type": "bytes",
+            "named": true
+          },
+          {
+            "type": "fun",
+            "named": true
+          },
+          {
+            "type": "hole",
+            "named": true
+          },
+          {
+            "type": "id",
+            "named": true
+          },
+          {
+            "type": "infix",
+            "named": true
+          },
+          {
+            "type": "list",
+            "named": true
+          },
+          {
+            "type": "match_fun",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "parens",
+            "named": true
+          },
+          {
+            "type": "record",
+            "named": true
+          },
+          {
+            "type": "tag",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
           "type": "apply",
+          "named": true
+        },
+        {
+          "type": "byte",
           "named": true
         },
         {
@@ -602,6 +836,10 @@
             "named": true
           },
           {
+            "type": "byte",
+            "named": true
+          },
+          {
             "type": "bytes",
             "named": true
           },
@@ -666,6 +904,10 @@
       "required": true,
       "types": [
         {
+          "type": "byte",
+          "named": true
+        },
+        {
           "type": "bytes",
           "named": true
         },
@@ -694,11 +936,11 @@
           "named": true
         },
         {
-          "type": "record",
+          "type": "record_pattern",
           "named": true
         },
         {
-          "type": "tag",
+          "type": "tag_pattern",
           "named": true
         },
         {
@@ -723,6 +965,10 @@
       "types": [
         {
           "type": "apply",
+          "named": true
+        },
+        {
+          "type": "byte",
           "named": true
         },
         {
@@ -796,6 +1042,21 @@
     }
   },
   {
+    "type": "record_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "field_pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "tag",
     "named": true,
     "fields": {},
@@ -803,6 +1064,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "byte",
+          "named": true
+        },
         {
           "type": "bytes",
           "named": true
@@ -847,6 +1112,63 @@
     }
   },
   {
+    "type": "tag_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "id",
+          "named": true
+        },
+        {
+          "type": "pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tagged_data_record",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "data_record",
+          "named": true
+        },
+        {
+          "type": "id",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "id",
+          "named": true
+        },
+        {
+          "type": "tagged_data_record",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "where",
     "named": true,
     "fields": {},
@@ -856,6 +1178,10 @@
       "types": [
         {
           "type": "apply",
+          "named": true
+        },
+        {
+          "type": "byte",
           "named": true
         },
         {
@@ -908,6 +1234,10 @@
         },
         {
           "type": "text",
+          "named": true
+        },
+        {
+          "type": "type_declaration",
           "named": true
         },
         {
@@ -1068,6 +1398,10 @@
   {
     "type": "^",
     "named": false
+  },
+  {
+    "type": "byte",
+    "named": true
   },
   {
     "type": "bytes",

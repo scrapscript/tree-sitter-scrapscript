@@ -21,6 +21,17 @@ BYTES TEST 2
   (bytes))
 
 ===========================
+BYTES TEST 3
+===========================
+
+~21
+
+---
+
+(program
+  (byte))
+
+===========================
 NUMBERS TEST 1
 ===========================
 
@@ -159,7 +170,7 @@ RECORD TEST 2
 (program
   (record
     (field
-      value: (id))))
+      record_spread: (id))))
 
 ===========================
 RECORD TEST 3
@@ -436,15 +447,17 @@ fun TEST 4
   (match_fun
     (match_arm
       (pattern
-        (tag
+        (tag_pattern
           (id)
-          (wildcard)))
+          (pattern
+            (wildcard))))
       (number))
     (match_arm
       (pattern
-        (tag
+        (tag_pattern
           (id)
-          (number)))
+          (pattern
+            (number))))
       (number))
     (match_arm
       (pattern
@@ -496,21 +509,25 @@ f (#add {x = 3, y = 4}) ; f = | #b () -> "foo" | #add {x = x, y = y} -> x + y
       (match_fun
         (match_arm
           (pattern
-            (tag
+            (tag_pattern
               (id)
-              (hole)))
+              (pattern
+                (hole))))
           (text))
         (match_arm
           (pattern
-            (tag
+            (tag_pattern
               (id)
-              (record
-                (field
-                  name: (id)
-                  value: (id))
-                (field
-                  name: (id)
-                  value: (id)))))
+              (pattern
+                (record_pattern
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (id)))
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (id)))))))
           (infix
             left: (id)
             op: (op)
@@ -539,15 +556,17 @@ say (1 < 2) ; say = | #false () -> "oh no" | #true () -> "omg"
       (match_fun
         (match_arm
           (pattern
-            (tag
+            (tag_pattern
               (id)
-              (hole)))
+              (pattern
+                (hole))))
           (text))
         (match_arm
           (pattern
-            (tag
+            (tag_pattern
               (id)
-              (hole)))
+              (pattern
+                (hole))))
           (text))))))
 
 ===========================
@@ -561,29 +580,30 @@ f {x = 4, y = 5} ; f = | {} -> 0 | {x = a, ...} -> a | c -> 1
 (program
   (where
     (apply
-      (id)
-      (record
-        (field
-          (id)
-          (number))
-        (field
-          (id)
-          (number))))
+      caller: (id)
+      callee: (record
+                (field
+                  name: (id)
+                  value: (number))
+                (field
+                  name: (id)
+                  value: (number))))
     (declaration
       (pattern
         (id))
       (match_fun
         (match_arm
           (pattern
-            (record))
+            (record_pattern))
           (number))
         (match_arm
           (pattern
-            (record
-              (field
-                (id)
-                (id))
-              (field)))
+            (record_pattern
+              (field_pattern
+                name: (id)
+                (pattern
+                  (id)))
+              (field_pattern)))
           (id))
         (match_arm
           (pattern
@@ -833,3 +853,245 @@ r.a ; r = { a = 1 }
         (field
           (id)
           (number))))))
+
+===========================
+guard TEST 1
+===========================
+
+classify-number
+; classify-number = 
+    | 0 -> #zero ()
+    | n ? n < 0 -> #negative n
+    | n ? n > 100 -> #large n
+    | n -> #normal n
+
+---
+
+(program
+  (where
+    (id)
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (number))
+          (tag
+            (id)
+            (hole)))
+        (match_arm
+          (pattern
+            (id))
+          guard: (infix
+                   left: (id)
+                   op: (op)
+                   right: (number))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (id))
+          guard: (infix
+                   left: (id)
+                   op: (op)
+                   right: (number))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (id))
+          (tag
+            (id)
+            (id)))))))
+
+===========================
+built-ins TEST 1
+===========================
+
+f
+; f = list/map
+; g = list/filter
+; h = maybe/default
+; k = result/bind
+
+---
+
+(program
+  (where
+    (where
+      (where
+        (where
+          (id)
+          (declaration
+            (pattern
+              (id))
+            (id)))
+        (declaration
+          (pattern
+            (id))
+          (id)))
+      (declaration
+        (pattern
+          (id))
+        (id)))
+    (declaration
+      (pattern
+        (id))
+      (id))))
+
+===========================
+type declaration TEST 1
+===========================
+
+shape
+; shape :
+    | #circle { radius : float }
+    | #rectangle { width : float, height : float }
+    | #triangle { base : float, height : float }
+
+---
+
+(program
+  (where
+    (id)
+    (type_declaration
+      (id)
+      (tagged_data_record
+        (id)
+        (data_record
+          (data_member
+            name: (id)
+            type: (id))))
+      (tagged_data_record
+        (id)
+        (data_record
+          (data_member
+            name: (id)
+            type: (id))
+          (data_member
+            name: (id)
+            type: (id))))
+      (tagged_data_record
+        (id)
+        (data_record
+          (data_member
+            name: (id)
+            type: (id))
+          (data_member
+            name: (id)
+            type: (id)))))))
+
+===========================
+fun TEST 11
+===========================
+
+process-response
+; process-response =
+    | #ok { status = 200, data = content } -> #success content
+    | #ok { status = 404, data = _ } -> #not-found ()
+    | #ok { status = s, data = _ } ? s >= 500 -> #server-error s
+    | #error msg -> #failure msg
+    | _ -> #unknown ()
+
+---
+
+(program
+  (where
+    (id)
+    (declaration
+      (pattern
+        (id))
+      (match_fun
+        (match_arm
+          (pattern
+            (tag_pattern
+              (id)
+              (pattern
+                (record_pattern
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (number)))
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (id)))))))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (tag_pattern
+              (id)
+              (pattern
+                (record_pattern
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (number)))
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (wildcard)))))))
+          (tag
+            (id)
+            (hole)))
+        (match_arm
+          (pattern
+            (tag_pattern
+              (id)
+              (pattern
+                (record_pattern
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (id)))
+                  (field_pattern
+                    name: (id)
+                    (pattern
+                      (wildcard)))))))
+          guard: (infix
+                   left: (id)
+                   op: (op)
+                   right: (number))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (tag_pattern
+              (id)
+              (pattern
+                (id))))
+          (tag
+            (id)
+            (id)))
+        (match_arm
+          (pattern
+            (wildcard))
+          (tag
+            (id)
+            (hole)))))))
+
+===========================
+native TEST 1
+===========================
+
+native-add; native-add = $$add 5 10
+
+---
+
+(program
+  (where
+    (id)
+    (declaration
+      (pattern
+        (id))
+      (apply
+        (apply
+          (id)
+          (number))
+        (number)))))

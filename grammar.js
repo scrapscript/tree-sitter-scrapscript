@@ -26,6 +26,12 @@ module.exports = grammar({
   conflicts: ($) => [
     [$._expr, $._callable],
     [$._expr, $.pattern],
+    [$.type_declaration, $.pattern],
+    [$.record, $.record_pattern],
+    [$.field, $.field_pattern],
+    [$._expr, $.field_pattern],
+    [$.tag, $.tag_pattern],
+    [$._unary, $.pattern],
   ],
 
    extras: $ => [
@@ -40,7 +46,22 @@ module.exports = grammar({
     // "where" declaration syntax production
     _subprogram: $ => choice($._expr, $.where),
 
-    where: $ => seq($._subprogram, ";", $.declaration),
+    where: $ => seq($._subprogram, ";", choice($.type_declaration, $.declaration)),
+
+    type_declaration: $ => seq($.id, ":", $._data_type),
+
+    _data_type: ($) =>
+      prec.right(
+        PREC.FUNCTION,
+        seq("|", $.tagged_data_record, repeat(seq("|", $.tagged_data_record)))
+      ),
+
+    tagged_data_record: ($) => seq("#", $.id, $.data_record),
+
+    // [TODO]: Do we want empty records?
+    data_record: ($) => seq("{", sepBy($.data_member, ","), "}"),
+
+    data_member: ($) => seq(field("name", $.id), ":", field("type", $.id)),
 
     declaration: $ => choice($._annotation, $._binding),
 
@@ -55,6 +76,7 @@ module.exports = grammar({
     _expr: ($) =>
       choice(
         $.apply,
+        $.byte,
         $.bytes,
         $.fun,
         $.hole,
@@ -73,6 +95,7 @@ module.exports = grammar({
 
     _unary: $ =>
       choice(
+        $.byte,
         $.bytes,
         $.hole,
         $.id,
@@ -110,11 +133,13 @@ module.exports = grammar({
 
     text: ($) => /"[^"]*"/,
 
+    byte: ($) => /~[A-Fa-f0-9]{2}/,
+
     bytes: ($) => /~~[A-Za-z0-9+/=]+/,
 
     list: ($) => seq("[", sepBy($._expr, ","), "]"),
 
-    id: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    id: ($) => /(\$\$)?[a-zA-Z_][a-zA-Z0-9_\/\-]*/,
 
     hole: ($) => "()",
 
@@ -126,8 +151,7 @@ module.exports = grammar({
       choice(
         field("name", $.id),
         seq(field("name", $.id), "=", field("value", $._expr)),
-        seq("..", field("value", $._expr)),
-        field("record_wildcard", "...")
+        seq("..", field("record_spread", $._expr)),
       ),
 
     // [TODO]: Do we want nested where clauses within regular
@@ -140,10 +164,13 @@ module.exports = grammar({
     match_fun: ($) =>
       prec.right(PREC.FUNCTION, seq("|", $.match_arm, repeat(seq("|", $.match_arm)))),
 
-    match_arm: ($) => prec.right(PREC.FUNCTION + 1, seq($.pattern, "->", $._expr)),
+    match_arm: ($) => prec.right(PREC.FUNCTION + 1, seq($._guardable_pattern, "->", $._expr)),
+
+    _guardable_pattern: ($) => seq($.pattern, optional(seq("?", field("guard", $._expr)))),
 
     pattern: ($) =>
       choice(
+        $.byte,
         $.bytes,
         $.cons,
         $.hole,
@@ -151,10 +178,22 @@ module.exports = grammar({
         $.list,
         $.number,
         $.parens,
-        $.record,
-        $.tag,
+        $.record_pattern,
+        $.tag_pattern,
         $.text,
         $.wildcard,
+      ),
+
+    tag_pattern: ($) => prec.right(5, seq("#", $.id, optional($.pattern))),
+
+    record_pattern: ($) => seq("{", optional(sepBy($.field_pattern, ",")), "}"),
+
+    field_pattern: ($) =>
+      choice(
+        field("name", $.id),
+        seq(field("name", $.id), "=", $.pattern),
+        seq("..", field("record_spread", $.id)),
+        field("record_wildcard", "...")
       ),
 
     cons: $ => prec.right(seq($.pattern, ">+", $.pattern)),
